@@ -1,0 +1,464 @@
+
+
+
+
+
+read -p "write names:  " name1
+read -sp "write pass:  " pass
+echo "names are:  $name1   password is:   $pass
+
+----------------------------------------------
+echo "Enter names: "
+read -a names
+echo -n "Names are: "
+echo "${names[0]}, ${names[1]}"
+\"yash\ patil\" patil
+
+------------------------------------
+read
+echo "$REPLY"
+ ------------------------------------
+ ARGUMENTS
+ $1  == first variable
+ $0 == name of the shell script
+
+cmdarg=("$@")     # $@ used to store array
+echo ${cmdarg[0]} ${cmdarg[1]}   # 0 index is first arg not name
+echo $@    # print entire array
+echo $#   # prints number of arguments
+ -----------------------------------
+ IF else
+integer comparison
+ -eq   is equal to  []
+ -ne   no equal to  []
+ -gt                []
+ -ge                []
+ -lt                []
+ -le                []
+ <                  (("$a" < "$b"))
+ <=                 (())
+ >                  (())
+ >=                 (())
+
+string comparison
+=  is equal to      []
+== is eual to       []
+!=                  [ "$a" < "$b" ]
+<                   [[]]
+>                   [[]]
+-z    string is null i.e zero length
+
+if [cond];
+then
+------
+-----
+elif [cond];
+then
+----
+----
+else
+----
+-----
+fi      
+
+----------------------------------
+FILE TEST OPERATORS
+
+-s to check if file is empty or not  IMP
+-e to check if file exists
+-f to check if the given name is a file regular file
+-d to check for directories
+-w to check if file has write perfissions or not
+-b block special files
+-c character special files
+
+***************add content to a text file******
+
+echo -e "Enter the name of the file: \c"
+# \c is used to keep the cursor on the same line
+#   at the end of  the echo command
+#   -e is used to enable escpe sequence
+read fileName
+echo "The file name is: $fileName"
+if [ -f $fileName ];    # to check if file exists
+then
+    echo "Found"
+    if [ -w $fileName ];
+    then
+        echo "Enter content: press ctrl+d to save"
+        cat >> $fileName
+        echo "Saved!!!"
+    else
+        echo "File doesnot have write permissions"
+    fi
+else
+    echo "File not found!! "
+fi
+
+********Check if file exists*******
+
+echo -e "Enter the name of the file: \c"
+# \c is used to keep the cursor on the same line
+#   at the end of  the echo command
+#   -e is used to enable escpe sequence
+read fileName
+echo "The file name is: $fileName"
+if [ -e $fileName ];    # to check if file exists
+then
+    echo "Found"
+else
+    echo "File not found!! "
+fi
+
+**********************************
+AND OPERATOR
+-a, && operators
+SYNTAX
+[ $age -gt 18 ] && [ $age -lt 30 ]
+[ $age -gt 18 -a $age -lt 30 ]
+[[ $age -gt 18 && $age -lt 30 ]]
+****************
+
+age=50
+if [ $age -gt 18 ] && [ $age -lt 30 ];
+then
+    echo "True"
+else
+    echo "False"
+fi
+********************************************
+age=50
+b=4
+if [ $age -gt 18 ] && [ $age -lt 30 ] && [ $b -eq 5 ];
+then
+    echo "True"
+else
+    echo "False"
+fi
+*********************************************
+OR OPERATOR
+-o, || operators
+SYNTAX
+[ $age -gt 18 ] || [ $age -lt 30 ]
+[ $age -gt 18 -o $age -lt 30 ]
+[[ $age -gt 18 || $age -lt 30 ]]
+*******************************************
+ARITHMETIC OPERATION
+
+num1=20
+num2=5
+
+echo $(( num1 + num2 ))     echo $(expr $num1 + $num2 )    
+echo $(( num1 - num2 ))     echo $(expr $num1 + $num2 )
+echo $(( num1 * num2 ))     echo $(expr $num1 \* $num2 )
+echo $(( num1 / num2 ))     echo $(expr $num1 / $num2 )
+echo $(( num1 % num2 ))     echo $(expr $num1 % $num2 )
+
+*********************************************
+Float decimal operators....
+
+num=27
+echo "scale=2;sqrt($num)" | bc -l
+echo "scale=5;e( l($num)/3)" | bc -l
+yash=$( echo "e( l(4)/5 )" | bc -l )
+echo $yash
+echo "scale=5;$num^2" | bc -l
+
+--------------------------------------------
+CASE SWITCH
+
+case expression in
+    pattern1 )
+        statements ;;
+    pattern2 )
+        statements ;;
+.....
+esac
+
+*********************
+vehicle=$1
+
+case $vehicle in
+    "van" ) 
+        echo "This is a van!!" ;;
+    "car" )
+        echo "This is a Car!!" ;;
+    * )
+        echo "Vehicle unkown!!" ;;
+esac
+*********************
+echo -e "Enter some Charecter:  \c"
+read val 
+case $val in
+    [a-z] ) 
+        echo "This is a to z!!" ;;
+    [A-Z] )
+        echo "This is A to Z!!" ;;
+    [0-9] )
+        echo "This is number!" ;;
+    ? )
+        echo "This is a special character!!" ;;
+    * )
+        echo "Unkown input!!" ;;
+esac
+------------------------------------------------------
+ARRAYS
+supports single 1D array
+
+os=('y' 'a' 'a')
+
+echo "${os[@]}"
+
+os=("y" "a" "b")
+
+# add element to array
+os[3]="mac"
+os[0]="abc"
+os[6]="patil"
+
+echo "${os[@]}"    # prints entire array
+echo "${os[2]}" # prints the value
+echo "${!os[@]}" #prints the indexs of array
+echo "${#os[@]}" #prints the length of the array
+
+#remove element
+unset os[2]
+
+#ignores null elements
+echo "${os[4]}"  #null will be printed 1 line gap
+
+echo "${os[@]}"    # prints entire array  ignores null values
+
+num=(6 5 4 3)
+echo "${num[@]}"
+calc=$(( num[0] - num[3] ))
+calc2=$(expr ${num[0]} - ${num[3]} )
+echo "$calc"
+echo "$calc2"
+num1=20
+num2=5
+echo $(( $num1 + $num2 )) 
+
+-----------------------------------------------------
+WHILE LOOP
+
+while [ condition ]
+do
+-----
+-------
+------
+done
+****************************
+n=1
+while [ $n -le 10 ]    # (( $n <= 10 ))
+do
+echo "$n"
+n=$(( n+1 ))  # (( n++ ))
+done
+***********************
+n=1
+while [ $n -le 10 ]    # (( $n <= 10 ))
+do
+echo "$n"
+n=$(( n+1 ))  # (( n++ ))
+sleep 1   # sleep for 2 sec
+done
+*************************************
+n=1
+while [ $n -le 10 ]    # (( $n <= 10 ))
+do
+echo "$n"
+n=$(( n+1 ))  # (( n++ ))
+done  
+***********************************
+while read p
+do 
+echo $p
+done < hello.sh
+************************************
+cat hello.sh | while read p
+do 
+echo $p
+done
+************************************
+while IFS=" " read -r line
+do 
+echo $line
+done < hello.sh
+
+--------------------------------------
+FOR LOOP
+
+for var in 1 2 3 4 5
+do
+echo $var
+done
+***********************
+for var in {1..10}
+do
+echo $var
+done
+**********************
+for var in {1..10..2}  # {start..end..interval}
+do
+echo $var
+done
+*********************
+for (( i=0; i<5; i++ ))
+do
+echo $i
+done
+***********************
+for command in ls pwd date
+do
+echo "-----------$command--------------"
+$command
+done
+*************************
+for item in *  # loop over all the files in the currnet dir
+do
+    if [ -d "$item" ];
+        then
+            echo $echo
+        fi
+done
+
+******************************
+SELECT LOOP
+select varName in list
+do
+.....
+....
+done
+**************************
+select name in mark john tom ben
+do
+echo "$name selected"
+done
+*************************
+select name in mark john tom ben
+do
+    case $name in
+        "mark" )
+            echo mark selected
+            ;;
+        "john" )
+            echo john selected
+            ;;
+        "tom" )
+            echo tom selected
+            ;;
+        "ben" )
+            echo ben selected
+            ;;
+         * )
+            echo nothing selected
+            ;;
+    esac
+done
+***********************************
+BREAK CONTINUE
+
+break  # keyword write in if statement
+****************************************
+
+--------------------------------------
+FUNCTIONS
+
+function Hello(){
+    echo "Hellosssss"
+}
+quit(){
+    exit
+}
+Hello
+quit
+echo "foo
+
+**************
+$1 $2 $3 are the arguments of the function
+
+return 1 statement
+can be used
+
+function print(){
+    echo $1 $2
+}
+quit(){
+    exit
+}
+print Hello hi
+quit
+echo "foo
+********************
+local keyword for variables 
+*****************************
+var=31
+readonly var
+var=50  # cannot change gives waring
+echo $var   # output is 31 not 50
+
+
+for function
+
+hello(){
+    echo "Helloeerer"
+}
+readonly -f hello
+
+
+hello(){   # cannot redeclare
+    echo "Helloedzvsfvgdfbdfberer"
+}
+
+
+****************************************************
+EXTRA
+
+bash -x fileName.sh   # debug mode
+------------------
+cat <filename> | head -n 20 # first 20 lines
+echo "$var" | head -c 20   # first 20 char
+tail 20
+
+
+tr -s " "   # -s is used to squeeze multiple occ to single
+tr -d "r"   # delete all occurance of  "r"
+
+
+ls | awk  "/^a/ {print $10}"
+
+$ awk -e '$1 ~ /p[el]/ {print $0}' filename
+^	Indicates the beginning of the line
+$	Indicates the end of a line
+\A	Denotes the beginning of a string
+\z	Denotes the end of a string
+\b	Marks a word boundary
+------------------------------------
+[ad]	Selects a or d
+[a-d]	Selects any character a through d (a, b, c, or d)
+[^a-d]	Selects any character except a through d (e, f, g, h…)
+\w	Selects any word
+\s	Selects any whitespace character
+\d	Selects any digit
+
+
+
+sort -n -k 2 -r -t $'\t'
+
+
+while read aaa
+do
+echo  $aaa | grep -q [aA]
+if [ $? -ne 0 ]
+then
+echo $aaa
+fi
+done
+
+
+
+sleep 2   # 2 sec of sleep
+
+df command
+---------------
